@@ -284,12 +284,10 @@ college <- read.csv("data/College.csv")
 
 ```{r}
 rownames(college) <- college[, 1]
-college
 ```
 
 ```{r}
 college <- college[, -1]
-college
 ```
 
 > c.
@@ -307,7 +305,7 @@ summary(college)
 ```{r}
 college$Private <- college$Private == "Yes"
 
-pairs(college[, 1:10])
+pairs(college[, 1:10], cex=0.2)
 ```
 
 >     iii. Use the `plot()` function to produce side-by-side boxplots of 
