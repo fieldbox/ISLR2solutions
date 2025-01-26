@@ -625,13 +625,13 @@ matter 1 what value you choose.</p></li>
 <li><p>Keeping <span class="math inline">\(\hat{\beta}_1\)</span> fixed, fit the model
 <span class="math display">\[Y - \hat{\beta}_1X_1 = \beta_0 + \beta_2X_2 + \epsilon.\]</span>
 You can do this as follows:</p>
-<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="moving-beyond-linearity.html#cb118-1" tabindex="-1"></a><span class="sc">&gt;</span> a <span class="ot">&lt;-</span> y <span class="sc">-</span> beta1 <span class="sc">*</span> x1</span>
-<span id="cb118-2"><a href="moving-beyond-linearity.html#cb118-2" tabindex="-1"></a><span class="sc">&gt;</span> beta2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(a <span class="sc">~</span> x2)<span class="sc">$</span>coef[<span class="dv">2</span>]</span></code></pre></div></li>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="moving-beyond-linearity.html#cb116-1" tabindex="-1"></a><span class="sc">&gt;</span> a <span class="ot">&lt;-</span> y <span class="sc">-</span> beta1 <span class="sc">*</span> x1</span>
+<span id="cb116-2"><a href="moving-beyond-linearity.html#cb116-2" tabindex="-1"></a><span class="sc">&gt;</span> beta2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(a <span class="sc">~</span> x2)<span class="sc">$</span>coef[<span class="dv">2</span>]</span></code></pre></div></li>
 <li><p>Keeping <span class="math inline">\(\hat{\beta}_2\)</span> fixed, fit the model
 <span class="math display">\[Y - \hat{\beta}_2X_2 = \beta_0 + \beta_1 X_1 + \epsilon.\]</span>
 You can do this as follows:</p>
-<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="moving-beyond-linearity.html#cb119-1" tabindex="-1"></a><span class="sc">&gt;</span> a <span class="ot">&lt;-</span> y <span class="sc">-</span> beta2 <span class="sc">*</span> x2</span>
-<span id="cb119-2"><a href="moving-beyond-linearity.html#cb119-2" tabindex="-1"></a><span class="sc">&gt;</span> beta1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(a <span class="sc">~</span> x1)<span class="sc">$</span>coef[<span class="dv">2</span>]</span></code></pre></div></li>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="moving-beyond-linearity.html#cb117-1" tabindex="-1"></a><span class="sc">&gt;</span> a <span class="ot">&lt;-</span> y <span class="sc">-</span> beta2 <span class="sc">*</span> x2</span>
+<span id="cb117-2"><a href="moving-beyond-linearity.html#cb117-2" tabindex="-1"></a><span class="sc">&gt;</span> beta1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(a <span class="sc">~</span> x1)<span class="sc">$</span>coef[<span class="dv">2</span>]</span></code></pre></div></li>
 <li><p>Write a for loop to repeat (c) and (d) 1,000 times. Report the estimates of
 <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1,\)</span> and <span class="math inline">\(\hat{\beta}_2\)</span> at each iteration of the
 for loop. Create a plot in which each of these values is displayed, with

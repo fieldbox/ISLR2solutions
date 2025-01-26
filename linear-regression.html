@@ -601,9 +601,9 @@ from (e)?</p></li>
 <p>In this problem we will investigate the <em>t</em>-statistic for the null hypothesis
 <span class="math inline">\(H_0 : \beta = 0\)</span> in simple linear regression without an intercept. To
 begin, we generate a predictor <code>x</code> and a response <code>y</code> as follows.</p>
-<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="linear-regression.html#cb109-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb109-2"><a href="linear-regression.html#cb109-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
-<span id="cb109-3"><a href="linear-regression.html#cb109-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="linear-regression.html#cb107-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb107-2"><a href="linear-regression.html#cb107-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb107-3"><a href="linear-regression.html#cb107-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span></code></pre></div>
 <ol style="list-style-type: lower-alpha">
 <li><p>Perform a simple linear regression of <code>y</code> onto <code>x</code>, <em>without</em> an intercept.
 Report the coefficient estimate <span class="math inline">\(\hat{\beta}\)</span>, the standard error of this
@@ -706,10 +706,10 @@ Comment on your results.</p></li>
 <p>This problem focuses on the collinearity problem.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Perform the following commands in R :</p>
-<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="linear-regression.html#cb110-1" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb110-2"><a href="linear-regression.html#cb110-2" tabindex="-1"></a><span class="sc">&gt;</span> x1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>)</span>
-<span id="cb110-3"><a href="linear-regression.html#cb110-3" tabindex="-1"></a><span class="sc">&gt;</span> x2 <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>) <span class="sc">/</span> <span class="dv">10</span></span>
-<span id="cb110-4"><a href="linear-regression.html#cb110-4" tabindex="-1"></a><span class="sc">&gt;</span> y <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fl">0.3</span> <span class="sc">*</span> x2 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="linear-regression.html#cb108-1" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb108-2"><a href="linear-regression.html#cb108-2" tabindex="-1"></a><span class="sc">&gt;</span> x1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>)</span>
+<span id="cb108-3"><a href="linear-regression.html#cb108-3" tabindex="-1"></a><span class="sc">&gt;</span> x2 <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>) <span class="sc">/</span> <span class="dv">10</span></span>
+<span id="cb108-4"><a href="linear-regression.html#cb108-4" tabindex="-1"></a><span class="sc">&gt;</span> y <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fl">0.3</span> <span class="sc">*</span> x2 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span></code></pre></div>
 <p>The last line corresponds to creating a linear model in which <code>y</code> is a
 function of <code>x1</code> and <code>x2</code>. Write out the form of the linear model. What are
 the regression coefficients?</p></li>
@@ -728,9 +728,9 @@ on your results. Can you reject the null hypothesis <span class="math inline">\(
 answer.</p></li>
 <li><p>Now suppose we obtain one additional observation, which was unfortunately
 mismeasured.</p>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="linear-regression.html#cb111-1" tabindex="-1"></a><span class="sc">&gt;</span> x1 <span class="ot">&lt;-</span> <span class="fu">c</span>(x1, <span class="fl">0.1</span>)</span>
-<span id="cb111-2"><a href="linear-regression.html#cb111-2" tabindex="-1"></a><span class="sc">&gt;</span> x2 <span class="ot">&lt;-</span> <span class="fu">c</span>(x2, <span class="fl">0.8</span>)</span>
-<span id="cb111-3"><a href="linear-regression.html#cb111-3" tabindex="-1"></a><span class="sc">&gt;</span> y <span class="ot">&lt;-</span> <span class="fu">c</span>(y, <span class="dv">6</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="linear-regression.html#cb109-1" tabindex="-1"></a><span class="sc">&gt;</span> x1 <span class="ot">&lt;-</span> <span class="fu">c</span>(x1, <span class="fl">0.1</span>)</span>
+<span id="cb109-2"><a href="linear-regression.html#cb109-2" tabindex="-1"></a><span class="sc">&gt;</span> x2 <span class="ot">&lt;-</span> <span class="fu">c</span>(x2, <span class="fl">0.8</span>)</span>
+<span id="cb109-3"><a href="linear-regression.html#cb109-3" tabindex="-1"></a><span class="sc">&gt;</span> y <span class="ot">&lt;-</span> <span class="fu">c</span>(y, <span class="dv">6</span>)</span></code></pre></div>
 <p>Re-fit the linear models from (c) to (e) using this new data. What effect
 does this new observation have on the each of the models? In each model, is
 this observation an outlier? A high-leverage point? Both? Explain your
