@@ -284,12 +284,12 @@ college <- read.csv("data/College.csv")
 
 ```{r}
 rownames(college) <- college[, 1]
-View(college)
+college
 ```
 
 ```{r}
 college <- college[, -1]
-View(college)
+college
 ```
 
 > c.
