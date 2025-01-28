@@ -4,8 +4,8 @@
 
 ### Question 1
 
-> Describe the null hypotheses to which the _p_values given in Table 3.4
-> correspond. Explain what conclusions you can draw based on these _p_values.
+> Describe the null hypotheses to which the _p_-values given in Table 3.4
+> correspond. Explain what conclusions you can draw based on these _p_-values.
 > Your explanation should be phrased in terms of `sales`, `TV`, `radio`, and
 > `newspaper`, rather than in terms of the coefficients of the linear model.
 
@@ -112,7 +112,7 @@ summary(lm.fit)
 
 >   i. Is there a relationship between the predictor and the response?
 
-Yes. The p-value for the t-statistic for horsepower is extremely low, which suggests a relationship.
+Yes. The _p_-value for the t-statistic for horsepower is extremely low, which suggests a relationship.
 
 >   ii. How strong is the relationship between the predictor and the response?
 
@@ -211,7 +211,7 @@ summary(lm.fit)
 
 >    i. Is there a relationship between the predictors and the response?
 
-Yes, as the p-value calculated from the F-test is very low.
+Yes, as the _p_-value calculated from the F-test is very low.
 
 >    ii. Which predictors appear to have a statistically significant relationship
 >       to the response?
@@ -296,26 +296,79 @@ The ANOVA test shows that including the `log(horsepower)` term significantly imp
 > a. Fit a multiple regression model to predict `Sales` using `Price`, `Urban`,
 >    and `US`.
 >
+
+```{r}
+lm.fita <- lm(Sales ~ Price + Urban + US, data = Carseats)
+summary(lm.fita)
+```
+
 > b. Provide an interpretation of each coefficient in the model. Be
 >    careful---some of the variables in the model are qualitative!
 >
+
+`Price`: For every $1 of extra cost, the number of sales decreases by around 50 units.
+
+`Urban`: The _p_-value given by the t-test is very high, which means `Urban` is highly unlikely to be statistically significant to `Sales`. The coefficient tells us that in urban regions, the sales decrease by around 20 units. However, because of the high _p_-value, we should not draw conclusions about any relationship between `Urban` and `Sales` as we do not have enough evidence.
+
+`US`: In US regions, the company's car seats tend to sell around 200 more units.
+
 > c. Write out the model in equation form, being careful to handle the
 >    qualitative variables properly.
 >
+
+$$Sales = 13 - 0.05 \cdot Price + \begin{cases}
+1.18, \ \ \ \text{for US} = \text{Yes,  Urban} = \text{Yes}\\
+1.20, \ \ \ \text{for US} = \text{Yes,  Urban} = \text{No}\\
+-0.02, \text{for US} = \text{Yes,  Urban} = \text{Yes}\\
+0,\ \ \ \ \ \ \ \ \text{for US} = \text{No,  Urban} = \text{No}
+\end{cases}$$
+
 > d. For which of the predictors can you reject the null hypothesis
 >    $H_0 : \beta_j = 0$?
 >
+
+`Price` and `US`, as their _p_-values from the t-test are sufficiently low.
+
 > e. On the basis of your response to the previous question, fit a smaller model
 >    that only uses the predictors for which there is evidence of association
 >    with the outcome.
 >
+
+```{r}
+lm.fite <- lm(Sales ~ Price + US, data = Carseats)
+summary(lm.fite)
+```
+
 > f. How well do the models in (a) and (e) fit the data?
 >
+
+Not very well - both have an $R^2$ statistic of 0.2393, which means only 24% of the variance of the data can be explained by either model. (e)'s model has a slightly smaller RSE at 2.469 compared to (a)'s 2.472, but both do not fit the data very well.
+
+```{r}
+anova(lm.fite, lm.fita)
+```
+The ANOVA test shows that part (a) fits (insignificantly) better.
 > g. Using the model from (e), obtain 95% confidence intervals for the
 >    coefficient(s).
+
+```{r}
+confint(lm.fite)
+```
+
 >
 > h. Is there evidence of outliers or high leverage observations in the model
 >    from (e)?
+
+```{r}
+plot(predict(lm.fite), rstudent(lm.fite), xlab = "Fitted values", ylab = "Studentised residuals", pch=20)
+```
+No values sit outside the -3 to 3 range for studentised residuals, so none seem to be outliers.
+
+```{r}
+plot(hatvalues(lm.fite), rstudent(lm.fite), xlab = "Leverage", ylab = "Studentised residuals", pch=20)
+```
+
+There is one significantly high leverage observation in the model.
 
 ### Question 11
 
@@ -327,16 +380,30 @@ The ANOVA test shows that including the `log(horsepower)` term significantly imp
 > x <- rnorm(100)
 > y <- 2 * x + rnorm(100)
 > ```
+
+```{r}
+set.seed(1)
+x <- rnorm(100)
+y <- 2 * x + rnorm(100)
+```
+
 >
 > a. Perform a simple linear regression of `y` onto `x`, _without_ an intercept.
 >    Report the coefficient estimate $\hat{\beta}$, the standard error of this
->    coefficient estimate, and the _t_-statistic and _p_value associated with the
+>    coefficient estimate, and the _t_-statistic and _p_-value associated with the
 >    null hypothesis $H_0 : \beta = 0$. Comment on these results. (You can
 >    perform regression without an intercept using the command `lm(y~x+0)`.)
 >
+
+```{r}
+lm.fit <- lm(y ~ x + 0)
+summary(lm.fit)
+```
+`x` is highly correlated with `y` (as is to be expected, since `y` is a linear transformation on `x`)
+
 > b. Now perform a simple linear regression of `x` onto `y` without an intercept,
 >    and report the coefficient estimate, its standard error, and the
->    corresponding _t_-statistic and _p_values associated with the null hypothesis
+>    corresponding _t_-statistic and _p_-values associated with the null hypothesis
 >    $H_0 : \beta = 0$. Comment on these results.
 >
 > c. What is the relationship between the results obtained in (a) and (b)?
