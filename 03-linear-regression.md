@@ -101,18 +101,211 @@
 > a. Use the `lm()` function to perform a simple linear regression with `mpg` as
 >   the response and `horsepower` as the predictor. Use the `summary()` function
 >   to print the results. Comment on the output. For example:
+
+
+``` r
+Auto <- read.table("data/Auto.data", na.strings = "?", stringsAsFactors = T, header = T)
+Auto <- na.omit(Auto)
+attach(Auto)
+lm.fit <- lm(mpg ~ horsepower)
+summary(lm.fit)
+```
+
+```
+## 
+## Call:
+## lm(formula = mpg ~ horsepower)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -13.5710  -3.2592  -0.3435   2.7630  16.9240 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 39.935861   0.717499   55.66   <2e-16 ***
+## horsepower  -0.157845   0.006446  -24.49   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 4.906 on 390 degrees of freedom
+## Multiple R-squared:  0.6059,	Adjusted R-squared:  0.6049 
+## F-statistic: 599.7 on 1 and 390 DF,  p-value: < 2.2e-16
+```
+
 >   i. Is there a relationship between the predictor and the response?
+
+Yes. The p-value for the t-statistic for horsepower is extremely low, which suggests a relationship.
+
 >   ii. How strong is the relationship between the predictor and the response?
+
+
+``` r
+mean(mpg)
+```
+
+```
+## [1] 23.44592
+```
+The RSE is 4.906 while the mean value of the response is 23.44592.
+
+
+``` r
+sigma(lm.fit)/mean(mpg)
+```
+
+```
+## [1] 0.2092371
+```
+This suggests a roughly 21% percentage error.
+
+The $R^2$ statistic is 0.6059 so our predictor explains 60.59% of the variance in the response.
+
 >   iii. Is the relationship between the predictor and the response positive or
 >        negative?
+
+
+``` r
+coef(lm.fit)[["horsepower"]]
+```
+
+```
+## [1] -0.1578447
+```
+The coefficient is less than 0, so the relationship is negative.
 >   iv. What is the predicted mpg associated with a horsepower of 98?
+
+
+``` r
+predict(lm.fit, data.frame(horsepower = 98))[[1]]
+```
+
+```
+## [1] 24.46708
+```
+
 >   v. What are the associated 95% confidence and prediction intervals?
 >
+
+
+``` r
+predict(lm.fit, data.frame(horsepower = 98), interval = "confidence")
+```
+
+```
+##        fit      lwr      upr
+## 1 24.46708 23.97308 24.96108
+```
+
+``` r
+predict(lm.fit, data.frame(horsepower = 98), interval = "prediction")
+```
+
+```
+##        fit     lwr      upr
+## 1 24.46708 14.8094 34.12476
+```
+
 > b. Plot the response and the predictor. Use the `abline()` function to display
 >   the least squares regression line.
 >
+
+
+``` r
+plot(horsepower, mpg, pch = 20)
+abline(lm.fit, lwd = 3, col = "red")
+```
+
+<img src="03-linear-regression_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+
 > c. Use the `plot()` function to produce diagnostic plots of the least squares
 >   regression fit. Comment on any problems you see with the fit.
+
+
+``` r
+plot(predict(lm.fit), residuals(lm.fit), pch = 20, xlab = "Fitted values", ylab = "Residuals")
+```
+
+<img src="03-linear-regression_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+There appears to be some evidence of non-linearity as it looks like there is a relationship between the fitted values and residuals.
+
+
+``` r
+plot(predict(lm.fit), rstudent(lm.fit), pch = 20, xlab = "Fitted values", ylab = "Studentised residuals")
+```
+
+<img src="03-linear-regression_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+
+There are some data points with studentised residuals above 3 - these are possible outliers.
+
+
+``` r
+which.max(rstudent(lm.fit))
+```
+
+```
+## 321 
+## 321
+```
+
+``` r
+lm.fitoutlier1 <- lm(mpg ~ horsepower, data = Auto[-321,])
+summary(lm.fit)
+```
+
+```
+## 
+## Call:
+## lm(formula = mpg ~ horsepower)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -13.5710  -3.2592  -0.3435   2.7630  16.9240 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 39.935861   0.717499   55.66   <2e-16 ***
+## horsepower  -0.157845   0.006446  -24.49   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 4.906 on 390 degrees of freedom
+## Multiple R-squared:  0.6059,	Adjusted R-squared:  0.6049 
+## F-statistic: 599.7 on 1 and 390 DF,  p-value: < 2.2e-16
+```
+
+``` r
+summary(lm.fitoutlier1)
+```
+
+```
+## 
+## Call:
+## lm(formula = mpg ~ horsepower, data = Auto[-321, ])
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -13.4900  -3.2685  -0.3354   2.7889  15.3266 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 39.771362   0.708867   56.11   <2e-16 ***
+## horsepower  -0.156686   0.006363  -24.63   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 4.836 on 389 degrees of freedom
+## Multiple R-squared:  0.6092,	Adjusted R-squared:  0.6082 
+## F-statistic: 606.4 on 1 and 389 DF,  p-value: < 2.2e-16
+```
+
+Removing the point with the highest studentised residual value improves the residual error from 4.906 to 4.836, and the $R^2$ statistic from 0.6059 to 0.6092.
+
+
+``` r
+plot(hatvalues(lm.fit), rstudent(lm.fit), pch=20, xlab = "Leverage", ylab = "Studentised residuals")
+```
+
+<img src="03-linear-regression_files/figure-html/unnamed-chunk-12-1.png" width="672" />
 
 ### Question 9
 
