@@ -173,19 +173,9 @@ plot(predict(lm.fit), rstudent(lm.fit), pch = 20, xlab = "Fitted values", ylab =
 There are some data points with studentised residuals above 3 - these are possible outliers.
 
 ```{r}
-which.max(rstudent(lm.fit))
-```
-```{r}
-lm.fitoutlier1 <- lm(mpg ~ horsepower, data = Auto[-321,])
-summary(lm.fit)
-summary(lm.fitoutlier1)
-```
-
-Removing the point with the highest studentised residual value improves the residual error from 4.906 to 4.836, and the $R^2$ statistic from 0.6059 to 0.6092.
-
-```{r}
 plot(hatvalues(lm.fit), rstudent(lm.fit), pch=20, xlab = "Leverage", ylab = "Studentised residuals")
 ```
+There are a few very high leverage points, however none are outside the studentised residual range of 3 to -3.
 
 ### Question 9
 
@@ -195,30 +185,109 @@ plot(hatvalues(lm.fit), rstudent(lm.fit), pch=20, xlab = "Leverage", ylab = "Stu
 > a. Produce a scatterplot matrix which includes all of the variables in the
 >    data set.
 >
+
+```{r}
+pairs(Auto, pch=20, cex=0.2)
+```
+
 > b. Compute the matrix of correlations between the variables using the function
 >    `cor()`. You will need to exclude the name variable, `name` which is
 >    qualitative.
 >
+
+```{r}
+cor(Auto[,!(names(Auto) %in% "name")])
+```
+
 > c. Use the `lm()` function to perform a multiple linear regression with `mpg`
 >    as the response and all other variables except name as the predictors. Use 
 >    the `summary()` function to print the results. Comment on the output. For
 >    instance:
+
+```{r}
+lm.fit <- lm(mpg ~ . - name, data = Auto)
+summary(lm.fit)
+```
+
 >    i. Is there a relationship between the predictors and the response?
+
+Yes, as the p-value calculated from the F-test is very low.
+
 >    ii. Which predictors appear to have a statistically significant relationship
 >       to the response?
+
+`displacement`, `weight`, `year`, and `origin`.
+
 >    iii. What does the coefficient for the `year` variable suggest?
 >
+
+`year` and `mpg` have a positive relationship, so the later a car is produced, the higher its miles per gallon.
+
 > d. Use the `plot()` function to produce diagnostic plots of the linear
 >    regression fit. Comment on any problems you see with the fit. Do the
 >    residual plots suggest any unusually large outliers? Does the leverage plot
 >    identify any observations with unusually high leverage?
 >
+
+```{r}
+plot(predict(lm.fit), residuals(lm.fit), pch = 20, xlab = "Fitted values", ylab = "Residuals")
+```
+There seems to be some kind of non-linearity in our dataset as the residuals seem to have some relationship with the fitted values.
+
+```{r}
+plot(predict(lm.fit), rstudent(lm.fit), pch = 20, xlab = "Fitted values", ylab = "Studentised residuals")
+```
+There are quite a few high residual values; their studentised residual values are above 3 which indicates an outlier.
+
+```{r}
+plot(hatvalues(lm.fit), rstudent(lm.fit), pch=20, xlab = "Leverage", ylab = "Studentised residuals")
+```
+```{r}
+max(hatvalues(lm.fit))
+```
+There is a very high leverage point with a leverage of 0.19.
+
 > e. Use the `*` and `:` symbols to fit linear regression models with
 >    interaction effects. Do any interactions appear to be statistically
 >    significant?
 >
+
+```{r}
+lm.fit <- lm(mpg ~ (. - name) * (. - name), data = Auto)
+summary(lm.fit)
+```
+
+Adding all possible interaction terms, `acceleration:origin` seems to be the one with the highest statistical significance. `acceleration:year` and `displacement:year` are also below the 0.05 level of significance, so should likely be included as well.
+
+```{r}
+lm.fitnoint <- lm(mpg ~ . - name, data = Auto)
+lm.fitint <- lm(mpg ~ . - name + acceleration:origin + acceleration:year + displacement:year, data = Auto)
+
+anova(lm.fitnoint, lm.fitint)
+```
+The ANOVA test shows that including these interaction terms significantly increases the fit of the model.
+
 > f. Try a few different transformations of the variables, such as $log(X)$,
 >    $\sqrt{X}$, $X^2$. Comment on your findings.
+
+Let's look at `horsepower`:
+
+```{r}
+par(mfrow = c(2, 2))
+plot(horsepower, mpg, pch = 20)
+plot(log(horsepower), mpg, pch = 20)
+plot(sqrt(horsepower), mpg, pch = 20)
+plot(horsepower^2, mpg, pch = 20)
+```
+Looking at these plots, the relationship between `log(horsepower)` and `mpg` seems more linear.
+
+```{r}
+lm.fitlog <- lm(mpg ~ . - name + log(horsepower), data = Auto)
+lm.fitnolog <- lm(mpg ~ . - name, data = Auto)
+
+anova(lm.fitnolog, lm.fitlog)
+```
+The ANOVA test shows that including the `log(horsepower)` term significantly improves the performance of the model. 
 
 ### Question 10
 
