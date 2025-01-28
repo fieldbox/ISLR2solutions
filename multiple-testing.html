@@ -541,10 +541,10 @@ null hypotheses do we reject?</p></li>
 <h3><span class="header-section-number">13.2.2</span> Question 8<a href="multiple-testing.html#question-8-11" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <blockquote>
 <p>In this problem, we will simulate data from <span class="math inline">\(m = 100\)</span> fund managers.</p>
-<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="multiple-testing.html#cb145-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb145-2"><a href="multiple-testing.html#cb145-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">20</span></span>
-<span id="cb145-3"><a href="multiple-testing.html#cb145-3" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb145-4"><a href="multiple-testing.html#cb145-4" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> m), <span class="at">ncol =</span> m)</span></code></pre></div>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="multiple-testing.html#cb156-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb156-2"><a href="multiple-testing.html#cb156-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb156-3"><a href="multiple-testing.html#cb156-3" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb156-4"><a href="multiple-testing.html#cb156-4" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> m), <span class="at">ncol =</span> m)</span></code></pre></div>
 <p>These data represent each fund manager’s percentage returns for each of <span class="math inline">\(n = 20\)</span> months. We wish to test the null hypothesis that each fund manager’s
 percentage returns have population mean equal to zero. Notice that we
 simulated the data in such a way that each fund manager’s percentage returns

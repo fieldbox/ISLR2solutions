@@ -608,51 +608,9 @@ There appears to be some evidence of non-linearity as it looks like there is a r
 <div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="linear-regression.html#cb123-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">predict</span>(lm.fit), <span class="fu">rstudent</span>(lm.fit), <span class="at">pch =</span> <span class="dv">20</span>, <span class="at">xlab =</span> <span class="st">&quot;Fitted values&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Studentised residuals&quot;</span>)</span></code></pre></div>
 <p><img src="03-linear-regression_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <p>There are some data points with studentised residuals above 3 - these are possible outliers.</p>
-<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="linear-regression.html#cb124-1" tabindex="-1"></a><span class="fu">which.max</span>(<span class="fu">rstudent</span>(lm.fit))</span></code></pre></div>
-<pre><code>## 321 
-## 321</code></pre>
-<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="linear-regression.html#cb126-1" tabindex="-1"></a>lm.fitoutlier1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> horsepower, <span class="at">data =</span> Auto[<span class="sc">-</span><span class="dv">321</span>,])</span>
-<span id="cb126-2"><a href="linear-regression.html#cb126-2" tabindex="-1"></a><span class="fu">summary</span>(lm.fit)</span></code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = mpg ~ horsepower)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -13.5710  -3.2592  -0.3435   2.7630  16.9240 
-## 
-## Coefficients:
-##              Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 39.935861   0.717499   55.66   &lt;2e-16 ***
-## horsepower  -0.157845   0.006446  -24.49   &lt;2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 4.906 on 390 degrees of freedom
-## Multiple R-squared:  0.6059, Adjusted R-squared:  0.6049 
-## F-statistic: 599.7 on 1 and 390 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="linear-regression.html#cb128-1" tabindex="-1"></a><span class="fu">summary</span>(lm.fitoutlier1)</span></code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = mpg ~ horsepower, data = Auto[-321, ])
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -13.4900  -3.2685  -0.3354   2.7889  15.3266 
-## 
-## Coefficients:
-##              Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 39.771362   0.708867   56.11   &lt;2e-16 ***
-## horsepower  -0.156686   0.006363  -24.63   &lt;2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 4.836 on 389 degrees of freedom
-## Multiple R-squared:  0.6092, Adjusted R-squared:  0.6082 
-## F-statistic: 606.4 on 1 and 389 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>Removing the point with the highest studentised residual value improves the residual error from 4.906 to 4.836, and the <span class="math inline">\(R^2\)</span> statistic from 0.6059 to 0.6092.</p>
-<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="linear-regression.html#cb130-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">hatvalues</span>(lm.fit), <span class="fu">rstudent</span>(lm.fit), <span class="at">pch=</span><span class="dv">20</span>, <span class="at">xlab =</span> <span class="st">&quot;Leverage&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Studentised residuals&quot;</span>)</span></code></pre></div>
-<p><img src="03-linear-regression_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="linear-regression.html#cb124-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">hatvalues</span>(lm.fit), <span class="fu">rstudent</span>(lm.fit), <span class="at">pch=</span><span class="dv">20</span>, <span class="at">xlab =</span> <span class="st">&quot;Leverage&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Studentised residuals&quot;</span>)</span></code></pre></div>
+<p><img src="03-linear-regression_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+There are a few very high leverage points, however none are outside the studentised residual range of 3 to -3.</p>
 </div>
 <div id="question-9-1" class="section level3 hasAnchor" number="3.2.2">
 <h3><span class="header-section-number">3.2.2</span> Question 9<a href="linear-regression.html#question-9-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -660,32 +618,212 @@ There appears to be some evidence of non-linearity as it looks like there is a r
 <p>This question involves the use of multiple linear regression on the <code>Auto</code>
 data set.</p>
 <ol style="list-style-type: lower-alpha">
-<li><p>Produce a scatterplot matrix which includes all of the variables in the
-data set.</p></li>
-<li><p>Compute the matrix of correlations between the variables using the function
-<code>cor()</code>. You will need to exclude the name variable, <code>name</code> which is
-qualitative.</p></li>
-<li><p>Use the <code>lm()</code> function to perform a multiple linear regression with <code>mpg</code>
-as the response and all other variables except name as the predictors. Use
-the <code>summary()</code> function to print the results. Comment on the output. For
-instance:</p>
-<ol style="list-style-type: lower-roman">
-<li>Is there a relationship between the predictors and the response?</li>
-<li>Which predictors appear to have a statistically significant relationship
-to the response?</li>
-<li>What does the coefficient for the <code>year</code> variable suggest?</li>
-</ol></li>
-<li><p>Use the <code>plot()</code> function to produce diagnostic plots of the linear
-regression fit. Comment on any problems you see with the fit. Do the
-residual plots suggest any unusually large outliers? Does the leverage plot
-identify any observations with unusually high leverage?</p></li>
-<li><p>Use the <code>*</code> and <code>:</code> symbols to fit linear regression models with
-interaction effects. Do any interactions appear to be statistically
-significant?</p></li>
-<li><p>Try a few different transformations of the variables, such as <span class="math inline">\(log(X)\)</span>,
-<span class="math inline">\(\sqrt{X}\)</span>, <span class="math inline">\(X^2\)</span>. Comment on your findings.</p></li>
+<li>Produce a scatterplot matrix which includes all of the variables in the
+data set.</li>
 </ol>
 </blockquote>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="linear-regression.html#cb125-1" tabindex="-1"></a><span class="fu">pairs</span>(Auto, <span class="at">pch=</span><span class="dv">20</span>, <span class="at">cex=</span><span class="fl">0.2</span>)</span></code></pre></div>
+<p><img src="03-linear-regression_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<blockquote>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Compute the matrix of correlations between the variables using the function
+<code>cor()</code>. You will need to exclude the name variable, <code>name</code> which is
+qualitative.</li>
+</ol>
+</blockquote>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="linear-regression.html#cb126-1" tabindex="-1"></a><span class="fu">cor</span>(Auto[,<span class="sc">!</span>(<span class="fu">names</span>(Auto) <span class="sc">%in%</span> <span class="st">&quot;name&quot;</span>)])</span></code></pre></div>
+<pre><code>##                     mpg  cylinders displacement horsepower     weight
+## mpg           1.0000000 -0.7776175   -0.8051269 -0.7784268 -0.8322442
+## cylinders    -0.7776175  1.0000000    0.9508233  0.8429834  0.8975273
+## displacement -0.8051269  0.9508233    1.0000000  0.8972570  0.9329944
+## horsepower   -0.7784268  0.8429834    0.8972570  1.0000000  0.8645377
+## weight       -0.8322442  0.8975273    0.9329944  0.8645377  1.0000000
+## acceleration  0.4233285 -0.5046834   -0.5438005 -0.6891955 -0.4168392
+## year          0.5805410 -0.3456474   -0.3698552 -0.4163615 -0.3091199
+## origin        0.5652088 -0.5689316   -0.6145351 -0.4551715 -0.5850054
+##              acceleration       year     origin
+## mpg             0.4233285  0.5805410  0.5652088
+## cylinders      -0.5046834 -0.3456474 -0.5689316
+## displacement   -0.5438005 -0.3698552 -0.6145351
+## horsepower     -0.6891955 -0.4163615 -0.4551715
+## weight         -0.4168392 -0.3091199 -0.5850054
+## acceleration    1.0000000  0.2903161  0.2127458
+## year            0.2903161  1.0000000  0.1815277
+## origin          0.2127458  0.1815277  1.0000000</code></pre>
+<blockquote>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Use the <code>lm()</code> function to perform a multiple linear regression with <code>mpg</code>
+as the response and all other variables except name as the predictors. Use
+the <code>summary()</code> function to print the results. Comment on the output. For
+instance:</li>
+</ol>
+</blockquote>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="linear-regression.html#cb128-1" tabindex="-1"></a>lm.fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> . <span class="sc">-</span> name, <span class="at">data =</span> Auto)</span>
+<span id="cb128-2"><a href="linear-regression.html#cb128-2" tabindex="-1"></a><span class="fu">summary</span>(lm.fit)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ . - name, data = Auto)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -9.5903 -2.1565 -0.1169  1.8690 13.0604 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  -17.218435   4.644294  -3.707  0.00024 ***
+## cylinders     -0.493376   0.323282  -1.526  0.12780    
+## displacement   0.019896   0.007515   2.647  0.00844 ** 
+## horsepower    -0.016951   0.013787  -1.230  0.21963    
+## weight        -0.006474   0.000652  -9.929  &lt; 2e-16 ***
+## acceleration   0.080576   0.098845   0.815  0.41548    
+## year           0.750773   0.050973  14.729  &lt; 2e-16 ***
+## origin         1.426141   0.278136   5.127 4.67e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.328 on 384 degrees of freedom
+## Multiple R-squared:  0.8215, Adjusted R-squared:  0.8182 
+## F-statistic: 252.4 on 7 and 384 DF,  p-value: &lt; 2.2e-16</code></pre>
+<blockquote>
+<ol style="list-style-type: lower-roman">
+<li>Is there a relationship between the predictors and the response?</li>
+</ol>
+</blockquote>
+<p>Yes, as the p-value calculated from the F-test is very low.</p>
+<blockquote>
+<ol start="2" style="list-style-type: lower-roman">
+<li>Which predictors appear to have a statistically significant relationship
+to the response?</li>
+</ol>
+</blockquote>
+<p><code>displacement</code>, <code>weight</code>, <code>year</code>, and <code>origin</code>.</p>
+<blockquote>
+<ol start="3" style="list-style-type: lower-roman">
+<li>What does the coefficient for the <code>year</code> variable suggest?</li>
+</ol>
+</blockquote>
+<p><code>year</code> and <code>mpg</code> have a positive relationship, so the later a car is produced, the higher its miles per gallon.</p>
+<blockquote>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Use the <code>plot()</code> function to produce diagnostic plots of the linear
+regression fit. Comment on any problems you see with the fit. Do the
+residual plots suggest any unusually large outliers? Does the leverage plot
+identify any observations with unusually high leverage?</li>
+</ol>
+</blockquote>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="linear-regression.html#cb130-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">predict</span>(lm.fit), <span class="fu">residuals</span>(lm.fit), <span class="at">pch =</span> <span class="dv">20</span>, <span class="at">xlab =</span> <span class="st">&quot;Fitted values&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>)</span></code></pre></div>
+<p><img src="03-linear-regression_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+There seems to be some kind of non-linearity in our dataset as the residuals seem to have some relationship with the fitted values.</p>
+<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb131-1"><a href="linear-regression.html#cb131-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">predict</span>(lm.fit), <span class="fu">rstudent</span>(lm.fit), <span class="at">pch =</span> <span class="dv">20</span>, <span class="at">xlab =</span> <span class="st">&quot;Fitted values&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Studentised residuals&quot;</span>)</span></code></pre></div>
+<p><img src="03-linear-regression_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+There are quite a few high residual values; their studentised residual values are above 3 which indicates an outlier.</p>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="linear-regression.html#cb132-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">hatvalues</span>(lm.fit), <span class="fu">rstudent</span>(lm.fit), <span class="at">pch=</span><span class="dv">20</span>, <span class="at">xlab =</span> <span class="st">&quot;Leverage&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Studentised residuals&quot;</span>)</span></code></pre></div>
+<p><img src="03-linear-regression_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="linear-regression.html#cb133-1" tabindex="-1"></a><span class="fu">max</span>(<span class="fu">hatvalues</span>(lm.fit))</span></code></pre></div>
+<pre><code>## [1] 0.1899129</code></pre>
+<p>There is a very high leverage point with a leverage of 0.19.</p>
+<blockquote>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Use the <code>*</code> and <code>:</code> symbols to fit linear regression models with
+interaction effects. Do any interactions appear to be statistically
+significant?</li>
+</ol>
+</blockquote>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb135-1"><a href="linear-regression.html#cb135-1" tabindex="-1"></a>lm.fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> (. <span class="sc">-</span> name) <span class="sc">*</span> (. <span class="sc">-</span> name), <span class="at">data =</span> Auto)</span>
+<span id="cb135-2"><a href="linear-regression.html#cb135-2" tabindex="-1"></a><span class="fu">summary</span>(lm.fit)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ (. - name) * (. - name), data = Auto)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -7.6303 -1.4481  0.0596  1.2739 11.1386 
+## 
+## Coefficients:
+##                             Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept)                3.548e+01  5.314e+01   0.668  0.50475   
+## cylinders                  6.989e+00  8.248e+00   0.847  0.39738   
+## displacement              -4.785e-01  1.894e-01  -2.527  0.01192 * 
+## horsepower                 5.034e-01  3.470e-01   1.451  0.14769   
+## weight                     4.133e-03  1.759e-02   0.235  0.81442   
+## acceleration              -5.859e+00  2.174e+00  -2.696  0.00735 **
+## year                       6.974e-01  6.097e-01   1.144  0.25340   
+## origin                    -2.090e+01  7.097e+00  -2.944  0.00345 **
+## cylinders:displacement    -3.383e-03  6.455e-03  -0.524  0.60051   
+## cylinders:horsepower       1.161e-02  2.420e-02   0.480  0.63157   
+## cylinders:weight           3.575e-04  8.955e-04   0.399  0.69000   
+## cylinders:acceleration     2.779e-01  1.664e-01   1.670  0.09584 . 
+## cylinders:year            -1.741e-01  9.714e-02  -1.793  0.07389 . 
+## cylinders:origin           4.022e-01  4.926e-01   0.816  0.41482   
+## displacement:horsepower   -8.491e-05  2.885e-04  -0.294  0.76867   
+## displacement:weight        2.472e-05  1.470e-05   1.682  0.09342 . 
+## displacement:acceleration -3.479e-03  3.342e-03  -1.041  0.29853   
+## displacement:year          5.934e-03  2.391e-03   2.482  0.01352 * 
+## displacement:origin        2.398e-02  1.947e-02   1.232  0.21875   
+## horsepower:weight         -1.968e-05  2.924e-05  -0.673  0.50124   
+## horsepower:acceleration   -7.213e-03  3.719e-03  -1.939  0.05325 . 
+## horsepower:year           -5.838e-03  3.938e-03  -1.482  0.13916   
+## horsepower:origin          2.233e-03  2.930e-02   0.076  0.93931   
+## weight:acceleration        2.346e-04  2.289e-04   1.025  0.30596   
+## weight:year               -2.245e-04  2.127e-04  -1.056  0.29182   
+## weight:origin             -5.789e-04  1.591e-03  -0.364  0.71623   
+## acceleration:year          5.562e-02  2.558e-02   2.174  0.03033 * 
+## acceleration:origin        4.583e-01  1.567e-01   2.926  0.00365 **
+## year:origin                1.393e-01  7.399e-02   1.882  0.06062 . 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.695 on 363 degrees of freedom
+## Multiple R-squared:  0.8893, Adjusted R-squared:  0.8808 
+## F-statistic: 104.2 on 28 and 363 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Adding all possible interaction terms, <code>acceleration:origin</code> seems to be the one with the highest statistical significance. <code>acceleration:year</code> and <code>displacement:year</code> are also below the 0.05 level of significance, so should likely be included as well.</p>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="linear-regression.html#cb137-1" tabindex="-1"></a>lm.fitnoint <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> . <span class="sc">-</span> name, <span class="at">data =</span> Auto)</span>
+<span id="cb137-2"><a href="linear-regression.html#cb137-2" tabindex="-1"></a>lm.fitint <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> . <span class="sc">-</span> name <span class="sc">+</span> acceleration<span class="sc">:</span>origin <span class="sc">+</span> acceleration<span class="sc">:</span>year <span class="sc">+</span> displacement<span class="sc">:</span>year, <span class="at">data =</span> Auto)</span>
+<span id="cb137-3"><a href="linear-regression.html#cb137-3" tabindex="-1"></a></span>
+<span id="cb137-4"><a href="linear-regression.html#cb137-4" tabindex="-1"></a><span class="fu">anova</span>(lm.fitnoint, lm.fitint)</span></code></pre></div>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: mpg ~ (cylinders + displacement + horsepower + weight + acceleration + 
+##     year + origin + name) - name
+## Model 2: mpg ~ (cylinders + displacement + horsepower + weight + acceleration + 
+##     year + origin + name) - name + acceleration:origin + acceleration:year + 
+##     displacement:year
+##   Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+## 1    384 4252.2                                  
+## 2    381 3457.6  3    794.63 29.188 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The ANOVA test shows that including these interaction terms significantly increases the fit of the model.</p>
+<blockquote>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Try a few different transformations of the variables, such as <span class="math inline">\(log(X)\)</span>,
+<span class="math inline">\(\sqrt{X}\)</span>, <span class="math inline">\(X^2\)</span>. Comment on your findings.</li>
+</ol>
+</blockquote>
+<p>Let’s look at <code>horsepower</code>:</p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="linear-regression.html#cb139-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb139-2"><a href="linear-regression.html#cb139-2" tabindex="-1"></a><span class="fu">plot</span>(horsepower, mpg, <span class="at">pch =</span> <span class="dv">20</span>)</span>
+<span id="cb139-3"><a href="linear-regression.html#cb139-3" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">log</span>(horsepower), mpg, <span class="at">pch =</span> <span class="dv">20</span>)</span>
+<span id="cb139-4"><a href="linear-regression.html#cb139-4" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">sqrt</span>(horsepower), mpg, <span class="at">pch =</span> <span class="dv">20</span>)</span>
+<span id="cb139-5"><a href="linear-regression.html#cb139-5" tabindex="-1"></a><span class="fu">plot</span>(horsepower<span class="sc">^</span><span class="dv">2</span>, mpg, <span class="at">pch =</span> <span class="dv">20</span>)</span></code></pre></div>
+<p><img src="03-linear-regression_files/figure-html/unnamed-chunk-20-1.png" width="672" />
+Looking at these plots, the relationship between <code>log(horsepower)</code> and <code>mpg</code> seems more linear.</p>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="linear-regression.html#cb140-1" tabindex="-1"></a>lm.fitlog <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> . <span class="sc">-</span> name <span class="sc">+</span> <span class="fu">log</span>(horsepower), <span class="at">data =</span> Auto)</span>
+<span id="cb140-2"><a href="linear-regression.html#cb140-2" tabindex="-1"></a>lm.fitnolog <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> . <span class="sc">-</span> name, <span class="at">data =</span> Auto)</span>
+<span id="cb140-3"><a href="linear-regression.html#cb140-3" tabindex="-1"></a></span>
+<span id="cb140-4"><a href="linear-regression.html#cb140-4" tabindex="-1"></a><span class="fu">anova</span>(lm.fitnolog, lm.fitlog)</span></code></pre></div>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: mpg ~ (cylinders + displacement + horsepower + weight + acceleration + 
+##     year + origin + name) - name
+## Model 2: mpg ~ (cylinders + displacement + horsepower + weight + acceleration + 
+##     year + origin + name) - name + log(horsepower)
+##   Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+## 1    384 4252.2                                  
+## 2    383 3354.0  1    898.19 102.56 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The ANOVA test shows that including the <code>log(horsepower)</code> term significantly improves the performance of the model.</p>
 </div>
 <div id="question-10-1" class="section level3 hasAnchor" number="3.2.3">
 <h3><span class="header-section-number">3.2.3</span> Question 10<a href="linear-regression.html#question-10-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -717,9 +855,9 @@ from (e)?</p></li>
 <p>In this problem we will investigate the <em>t</em>-statistic for the null hypothesis
 <span class="math inline">\(H_0 : \beta = 0\)</span> in simple linear regression without an intercept. To
 begin, we generate a predictor <code>x</code> and a response <code>y</code> as follows.</p>
-<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb131-1"><a href="linear-regression.html#cb131-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb131-2"><a href="linear-regression.html#cb131-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
-<span id="cb131-3"><a href="linear-regression.html#cb131-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="linear-regression.html#cb142-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb142-2"><a href="linear-regression.html#cb142-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb142-3"><a href="linear-regression.html#cb142-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span></code></pre></div>
 <ol style="list-style-type: lower-alpha">
 <li><p>Perform a simple linear regression of <code>y</code> onto <code>x</code>, <em>without</em> an intercept.
 Report the coefficient estimate <span class="math inline">\(\hat{\beta}\)</span>, the standard error of this
@@ -822,10 +960,10 @@ Comment on your results.</p></li>
 <p>This problem focuses on the collinearity problem.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Perform the following commands in R :</p>
-<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="linear-regression.html#cb132-1" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb132-2"><a href="linear-regression.html#cb132-2" tabindex="-1"></a><span class="sc">&gt;</span> x1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>)</span>
-<span id="cb132-3"><a href="linear-regression.html#cb132-3" tabindex="-1"></a><span class="sc">&gt;</span> x2 <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>) <span class="sc">/</span> <span class="dv">10</span></span>
-<span id="cb132-4"><a href="linear-regression.html#cb132-4" tabindex="-1"></a><span class="sc">&gt;</span> y <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fl">0.3</span> <span class="sc">*</span> x2 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb143-1"><a href="linear-regression.html#cb143-1" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb143-2"><a href="linear-regression.html#cb143-2" tabindex="-1"></a><span class="sc">&gt;</span> x1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>)</span>
+<span id="cb143-3"><a href="linear-regression.html#cb143-3" tabindex="-1"></a><span class="sc">&gt;</span> x2 <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>) <span class="sc">/</span> <span class="dv">10</span></span>
+<span id="cb143-4"><a href="linear-regression.html#cb143-4" tabindex="-1"></a><span class="sc">&gt;</span> y <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fl">0.3</span> <span class="sc">*</span> x2 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span></code></pre></div>
 <p>The last line corresponds to creating a linear model in which <code>y</code> is a
 function of <code>x1</code> and <code>x2</code>. Write out the form of the linear model. What are
 the regression coefficients?</p></li>
@@ -844,9 +982,9 @@ on your results. Can you reject the null hypothesis <span class="math inline">\(
 answer.</p></li>
 <li><p>Now suppose we obtain one additional observation, which was unfortunately
 mismeasured.</p>
-<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="linear-regression.html#cb133-1" tabindex="-1"></a><span class="sc">&gt;</span> x1 <span class="ot">&lt;-</span> <span class="fu">c</span>(x1, <span class="fl">0.1</span>)</span>
-<span id="cb133-2"><a href="linear-regression.html#cb133-2" tabindex="-1"></a><span class="sc">&gt;</span> x2 <span class="ot">&lt;-</span> <span class="fu">c</span>(x2, <span class="fl">0.8</span>)</span>
-<span id="cb133-3"><a href="linear-regression.html#cb133-3" tabindex="-1"></a><span class="sc">&gt;</span> y <span class="ot">&lt;-</span> <span class="fu">c</span>(y, <span class="dv">6</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="linear-regression.html#cb144-1" tabindex="-1"></a><span class="sc">&gt;</span> x1 <span class="ot">&lt;-</span> <span class="fu">c</span>(x1, <span class="fl">0.1</span>)</span>
+<span id="cb144-2"><a href="linear-regression.html#cb144-2" tabindex="-1"></a><span class="sc">&gt;</span> x2 <span class="ot">&lt;-</span> <span class="fu">c</span>(x2, <span class="fl">0.8</span>)</span>
+<span id="cb144-3"><a href="linear-regression.html#cb144-3" tabindex="-1"></a><span class="sc">&gt;</span> y <span class="ot">&lt;-</span> <span class="fu">c</span>(y, <span class="dv">6</span>)</span></code></pre></div>
 <p>Re-fit the linear models from (c) to (e) using this new data. What effect
 does this new observation have on the each of the models? In each model, is
 this observation an outlier? A high-leverage point? Both? Explain your

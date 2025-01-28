@@ -239,73 +239,11 @@ There are some data points with studentised residuals above 3 - these are possib
 
 
 ``` r
-which.max(rstudent(lm.fit))
-```
-
-```
-## 321 
-## 321
-```
-
-``` r
-lm.fitoutlier1 <- lm(mpg ~ horsepower, data = Auto[-321,])
-summary(lm.fit)
-```
-
-```
-## 
-## Call:
-## lm(formula = mpg ~ horsepower)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -13.5710  -3.2592  -0.3435   2.7630  16.9240 
-## 
-## Coefficients:
-##              Estimate Std. Error t value Pr(>|t|)    
-## (Intercept) 39.935861   0.717499   55.66   <2e-16 ***
-## horsepower  -0.157845   0.006446  -24.49   <2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 4.906 on 390 degrees of freedom
-## Multiple R-squared:  0.6059,	Adjusted R-squared:  0.6049 
-## F-statistic: 599.7 on 1 and 390 DF,  p-value: < 2.2e-16
-```
-
-``` r
-summary(lm.fitoutlier1)
-```
-
-```
-## 
-## Call:
-## lm(formula = mpg ~ horsepower, data = Auto[-321, ])
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -13.4900  -3.2685  -0.3354   2.7889  15.3266 
-## 
-## Coefficients:
-##              Estimate Std. Error t value Pr(>|t|)    
-## (Intercept) 39.771362   0.708867   56.11   <2e-16 ***
-## horsepower  -0.156686   0.006363  -24.63   <2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 4.836 on 389 degrees of freedom
-## Multiple R-squared:  0.6092,	Adjusted R-squared:  0.6082 
-## F-statistic: 606.4 on 1 and 389 DF,  p-value: < 2.2e-16
-```
-
-Removing the point with the highest studentised residual value improves the residual error from 4.906 to 4.836, and the $R^2$ statistic from 0.6059 to 0.6092.
-
-
-``` r
 plot(hatvalues(lm.fit), rstudent(lm.fit), pch=20, xlab = "Leverage", ylab = "Studentised residuals")
 ```
 
-<img src="03-linear-regression_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="03-linear-regression_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+There are a few very high leverage points, however none are outside the studentised residual range of 3 to -3.
 
 ### Question 9
 
@@ -315,30 +253,259 @@ plot(hatvalues(lm.fit), rstudent(lm.fit), pch=20, xlab = "Leverage", ylab = "Stu
 > a. Produce a scatterplot matrix which includes all of the variables in the
 >    data set.
 >
+
+
+``` r
+pairs(Auto, pch=20, cex=0.2)
+```
+
+<img src="03-linear-regression_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+
 > b. Compute the matrix of correlations between the variables using the function
 >    `cor()`. You will need to exclude the name variable, `name` which is
 >    qualitative.
 >
+
+
+``` r
+cor(Auto[,!(names(Auto) %in% "name")])
+```
+
+```
+##                     mpg  cylinders displacement horsepower     weight
+## mpg           1.0000000 -0.7776175   -0.8051269 -0.7784268 -0.8322442
+## cylinders    -0.7776175  1.0000000    0.9508233  0.8429834  0.8975273
+## displacement -0.8051269  0.9508233    1.0000000  0.8972570  0.9329944
+## horsepower   -0.7784268  0.8429834    0.8972570  1.0000000  0.8645377
+## weight       -0.8322442  0.8975273    0.9329944  0.8645377  1.0000000
+## acceleration  0.4233285 -0.5046834   -0.5438005 -0.6891955 -0.4168392
+## year          0.5805410 -0.3456474   -0.3698552 -0.4163615 -0.3091199
+## origin        0.5652088 -0.5689316   -0.6145351 -0.4551715 -0.5850054
+##              acceleration       year     origin
+## mpg             0.4233285  0.5805410  0.5652088
+## cylinders      -0.5046834 -0.3456474 -0.5689316
+## displacement   -0.5438005 -0.3698552 -0.6145351
+## horsepower     -0.6891955 -0.4163615 -0.4551715
+## weight         -0.4168392 -0.3091199 -0.5850054
+## acceleration    1.0000000  0.2903161  0.2127458
+## year            0.2903161  1.0000000  0.1815277
+## origin          0.2127458  0.1815277  1.0000000
+```
+
 > c. Use the `lm()` function to perform a multiple linear regression with `mpg`
 >    as the response and all other variables except name as the predictors. Use 
 >    the `summary()` function to print the results. Comment on the output. For
 >    instance:
+
+
+``` r
+lm.fit <- lm(mpg ~ . - name, data = Auto)
+summary(lm.fit)
+```
+
+```
+## 
+## Call:
+## lm(formula = mpg ~ . - name, data = Auto)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -9.5903 -2.1565 -0.1169  1.8690 13.0604 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  -17.218435   4.644294  -3.707  0.00024 ***
+## cylinders     -0.493376   0.323282  -1.526  0.12780    
+## displacement   0.019896   0.007515   2.647  0.00844 ** 
+## horsepower    -0.016951   0.013787  -1.230  0.21963    
+## weight        -0.006474   0.000652  -9.929  < 2e-16 ***
+## acceleration   0.080576   0.098845   0.815  0.41548    
+## year           0.750773   0.050973  14.729  < 2e-16 ***
+## origin         1.426141   0.278136   5.127 4.67e-07 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 3.328 on 384 degrees of freedom
+## Multiple R-squared:  0.8215,	Adjusted R-squared:  0.8182 
+## F-statistic: 252.4 on 7 and 384 DF,  p-value: < 2.2e-16
+```
+
 >    i. Is there a relationship between the predictors and the response?
+
+Yes, as the p-value calculated from the F-test is very low.
+
 >    ii. Which predictors appear to have a statistically significant relationship
 >       to the response?
+
+`displacement`, `weight`, `year`, and `origin`.
+
 >    iii. What does the coefficient for the `year` variable suggest?
 >
+
+`year` and `mpg` have a positive relationship, so the later a car is produced, the higher its miles per gallon.
+
 > d. Use the `plot()` function to produce diagnostic plots of the linear
 >    regression fit. Comment on any problems you see with the fit. Do the
 >    residual plots suggest any unusually large outliers? Does the leverage plot
 >    identify any observations with unusually high leverage?
 >
+
+
+``` r
+plot(predict(lm.fit), residuals(lm.fit), pch = 20, xlab = "Fitted values", ylab = "Residuals")
+```
+
+<img src="03-linear-regression_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+There seems to be some kind of non-linearity in our dataset as the residuals seem to have some relationship with the fitted values.
+
+
+``` r
+plot(predict(lm.fit), rstudent(lm.fit), pch = 20, xlab = "Fitted values", ylab = "Studentised residuals")
+```
+
+<img src="03-linear-regression_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+There are quite a few high residual values; their studentised residual values are above 3 which indicates an outlier.
+
+
+``` r
+plot(hatvalues(lm.fit), rstudent(lm.fit), pch=20, xlab = "Leverage", ylab = "Studentised residuals")
+```
+
+<img src="03-linear-regression_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+
+``` r
+max(hatvalues(lm.fit))
+```
+
+```
+## [1] 0.1899129
+```
+There is a very high leverage point with a leverage of 0.19.
+
 > e. Use the `*` and `:` symbols to fit linear regression models with
 >    interaction effects. Do any interactions appear to be statistically
 >    significant?
 >
+
+
+``` r
+lm.fit <- lm(mpg ~ (. - name) * (. - name), data = Auto)
+summary(lm.fit)
+```
+
+```
+## 
+## Call:
+## lm(formula = mpg ~ (. - name) * (. - name), data = Auto)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -7.6303 -1.4481  0.0596  1.2739 11.1386 
+## 
+## Coefficients:
+##                             Estimate Std. Error t value Pr(>|t|)   
+## (Intercept)                3.548e+01  5.314e+01   0.668  0.50475   
+## cylinders                  6.989e+00  8.248e+00   0.847  0.39738   
+## displacement              -4.785e-01  1.894e-01  -2.527  0.01192 * 
+## horsepower                 5.034e-01  3.470e-01   1.451  0.14769   
+## weight                     4.133e-03  1.759e-02   0.235  0.81442   
+## acceleration              -5.859e+00  2.174e+00  -2.696  0.00735 **
+## year                       6.974e-01  6.097e-01   1.144  0.25340   
+## origin                    -2.090e+01  7.097e+00  -2.944  0.00345 **
+## cylinders:displacement    -3.383e-03  6.455e-03  -0.524  0.60051   
+## cylinders:horsepower       1.161e-02  2.420e-02   0.480  0.63157   
+## cylinders:weight           3.575e-04  8.955e-04   0.399  0.69000   
+## cylinders:acceleration     2.779e-01  1.664e-01   1.670  0.09584 . 
+## cylinders:year            -1.741e-01  9.714e-02  -1.793  0.07389 . 
+## cylinders:origin           4.022e-01  4.926e-01   0.816  0.41482   
+## displacement:horsepower   -8.491e-05  2.885e-04  -0.294  0.76867   
+## displacement:weight        2.472e-05  1.470e-05   1.682  0.09342 . 
+## displacement:acceleration -3.479e-03  3.342e-03  -1.041  0.29853   
+## displacement:year          5.934e-03  2.391e-03   2.482  0.01352 * 
+## displacement:origin        2.398e-02  1.947e-02   1.232  0.21875   
+## horsepower:weight         -1.968e-05  2.924e-05  -0.673  0.50124   
+## horsepower:acceleration   -7.213e-03  3.719e-03  -1.939  0.05325 . 
+## horsepower:year           -5.838e-03  3.938e-03  -1.482  0.13916   
+## horsepower:origin          2.233e-03  2.930e-02   0.076  0.93931   
+## weight:acceleration        2.346e-04  2.289e-04   1.025  0.30596   
+## weight:year               -2.245e-04  2.127e-04  -1.056  0.29182   
+## weight:origin             -5.789e-04  1.591e-03  -0.364  0.71623   
+## acceleration:year          5.562e-02  2.558e-02   2.174  0.03033 * 
+## acceleration:origin        4.583e-01  1.567e-01   2.926  0.00365 **
+## year:origin                1.393e-01  7.399e-02   1.882  0.06062 . 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.695 on 363 degrees of freedom
+## Multiple R-squared:  0.8893,	Adjusted R-squared:  0.8808 
+## F-statistic: 104.2 on 28 and 363 DF,  p-value: < 2.2e-16
+```
+
+Adding all possible interaction terms, `acceleration:origin` seems to be the one with the highest statistical significance. `acceleration:year` and `displacement:year` are also below the 0.05 level of significance, so should likely be included as well.
+
+
+``` r
+lm.fitnoint <- lm(mpg ~ . - name, data = Auto)
+lm.fitint <- lm(mpg ~ . - name + acceleration:origin + acceleration:year + displacement:year, data = Auto)
+
+anova(lm.fitnoint, lm.fitint)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Model 1: mpg ~ (cylinders + displacement + horsepower + weight + acceleration + 
+##     year + origin + name) - name
+## Model 2: mpg ~ (cylinders + displacement + horsepower + weight + acceleration + 
+##     year + origin + name) - name + acceleration:origin + acceleration:year + 
+##     displacement:year
+##   Res.Df    RSS Df Sum of Sq      F    Pr(>F)    
+## 1    384 4252.2                                  
+## 2    381 3457.6  3    794.63 29.188 < 2.2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+The ANOVA test shows that including these interaction terms significantly increases the fit of the model.
+
 > f. Try a few different transformations of the variables, such as $log(X)$,
 >    $\sqrt{X}$, $X^2$. Comment on your findings.
+
+Let's look at `horsepower`:
+
+
+``` r
+par(mfrow = c(2, 2))
+plot(horsepower, mpg, pch = 20)
+plot(log(horsepower), mpg, pch = 20)
+plot(sqrt(horsepower), mpg, pch = 20)
+plot(horsepower^2, mpg, pch = 20)
+```
+
+<img src="03-linear-regression_files/figure-html/unnamed-chunk-20-1.png" width="672" />
+Looking at these plots, the relationship between `log(horsepower)` and `mpg` seems more linear.
+
+
+``` r
+lm.fitlog <- lm(mpg ~ . - name + log(horsepower), data = Auto)
+lm.fitnolog <- lm(mpg ~ . - name, data = Auto)
+
+anova(lm.fitnolog, lm.fitlog)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Model 1: mpg ~ (cylinders + displacement + horsepower + weight + acceleration + 
+##     year + origin + name) - name
+## Model 2: mpg ~ (cylinders + displacement + horsepower + weight + acceleration + 
+##     year + origin + name) - name + log(horsepower)
+##   Res.Df    RSS Df Sum of Sq      F    Pr(>F)    
+## 1    384 4252.2                                  
+## 2    383 3354.0  1    898.19 102.56 < 2.2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+The ANOVA test shows that including the `log(horsepower)` term significantly improves the performance of the model. 
 
 ### Question 10
 
